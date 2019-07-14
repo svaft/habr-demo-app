@@ -98,8 +98,8 @@ spec:
                 }
                 container('docker') {
                     script {
-                        registryIp = sh(script: 'getent hosts registry.kube-system | awk \'{ print $1 ; exit }\'', returnStdout: true).trim()
-                        sh "docker build . -t docker-registry.docker-registry:5000/demo/app:${revision} --build-arg REVISION=${revision}"
+                        registryIp = sh(script: 'getent hosts docker-registry.docker-registry | awk \'{ print $1 ; exit }\'', returnStdout: true).trim()
+                        sh "docker build . -t ${registryIp}:5000/demo/app:${revision} --build-arg REVISION=${revision}"
                     }
                 }
             }
@@ -112,7 +112,7 @@ spec:
             }
             steps {
                 container('docker') {
-                    sh "docker push docker-registry.docker-registry:5000/demo/app:${revision}"
+                    sh "docker push ${registryIp}:5000/demo/app:${revision}"
                 }
             }
         }
