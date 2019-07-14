@@ -35,7 +35,7 @@ spec:
     - name: repository
       mountPath: /root/.m2/repository
   - name: docker
-    image: docker:18.09.2
+    image: docker:18.09.6
     command: ["cat"]
     tty: true
     volumeMounts:
@@ -99,7 +99,7 @@ spec:
                 container('docker') {
                     script {
                         registryIp = sh(script: 'getent hosts registry.kube-system | awk \'{ print $1 ; exit }\'', returnStdout: true).trim()
-                        sh "docker build . -t 10.98.220.26:5000/demo/app:${revision} --build-arg REVISION=${revision}"
+                        sh "docker build . -t docker-registry.docker-registry:5000/demo/app:${revision} --build-arg REVISION=${revision}"
                     }
                 }
             }
@@ -112,7 +112,7 @@ spec:
             }
             steps {
                 container('docker') {
-                    sh "docker push 10.98.220.26:5000/demo/app:${revision}"
+                    sh "docker push docker-registry.docker-registry:5000/demo/app:${revision}"
                 }
             }
         }
